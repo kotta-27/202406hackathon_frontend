@@ -4,13 +4,23 @@ import {
   BedrockRuntimeClient,
   InvokeModelCommand,
 } from "@aws-sdk/client-bedrock-runtime";
-// import "../stylesheet/Claude.css";
+import "../stylesheet/Execute.css";
 
-const client = new BedrockRuntimeClient({ region: "us-east-1" });
+const client = new BedrockRuntimeClient({
+  region: "us-east-1",
+  credentials: {
+    // 各々のアクセスkeyを入れる
+    accessKeyId: "",
+    secretAccessKey: "",
+  },
+});
 
 // モデルを呼び出す関数を実行
 function ExecuteRequest({ count }) {
   const [message, setMessage] = useState("");
+  const myPrompt = "【悲報】NTTのインターン落ちた件について";
+  const nanJ =
+    "なんJ民のような口調で語ってください．スレの形式にしてもいいです．エセ関西弁で．4センテンスくらいで．あおってください";
 
   // BedrockRuntimeClientのインスタンスを作成し、AWSのus-east-1リージョンを指定
 
@@ -23,7 +33,7 @@ function ExecuteRequest({ count }) {
       anthropic_version: "bedrock-2023-05-31", // 使用するAnthropicのバージョン
       max_tokens: 1000, // 最大トークン数
       messages: [
-        { role: "user", content: [{ type: "text", text: "お腹が空きました" }] },
+        { role: "user", content: [{ type: "text", text: myPrompt + nanJ }] },
       ], // ユーザーの入力メッセージ
     }),
   };
@@ -54,15 +64,21 @@ function ExecuteRequest({ count }) {
   };
 
   useEffect(() => {
-    // invokeModel();
-    setMessage(`モデルを呼び出しました${count}`);
+    // Claudeに投げるときはここをコメントアウト．入れ替える．
+    // if (count > 0) invokeModel();
+    setMessage(`モデルを呼び出しました  ${count}`);
   }, [count]);
 
   useEffect(() => {
     console.log(message);
   }, [message]);
 
-  return <div className="Execute">{message}</div>;
+  return (
+    <div>
+      <h3>{myPrompt}</h3>
+      <div className="Execute">{message}</div>
+    </div>
+  );
 }
 
 export default ExecuteRequest;

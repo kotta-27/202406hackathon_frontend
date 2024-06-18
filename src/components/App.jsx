@@ -1,4 +1,4 @@
-import '../stylesheet/App.css';
+import "../stylesheet/App.css";
 
 function App() {
   return (
@@ -6,10 +6,6 @@ function App() {
       <header className="App-header">
         <h1>Hello World!!!!!</h1>
         <h2>My first React App</h2>
-    
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
       </header>
     </div>
   );
