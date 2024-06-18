@@ -10,15 +10,17 @@ const client = new BedrockRuntimeClient({
   region: "us-east-1",
   credentials: {
     // 各々のアクセスkeyを入れる
-    accessKeyId: "",
-    secretAccessKey: "",
+    // それぞれの.envふぁいるに,REACT_APP_KEY_ID,REACT_APP_SECRET_KEYを入れる
+    accessKeyId: process.env.REACT_APP_KEY_ID,
+    secretAccessKey: process.env.REACT_APP_SECRET_KEY,
   },
 });
 
 // モデルを呼び出す関数を実行
-function ExecuteRequest({ count }) {
+function ExecuteRequest({ count, changeIsLoading }) {
   const [message, setMessage] = useState("");
-  const myPrompt = "【悲報】NTTのインターン落ちた件について";
+  const [isLoading, setIsLoading] = useState(false);
+  const myPrompt = "【悲報】今週のタスクがやばすぎる件wwww";
   const nanJ =
     "なんJ民のような口調で語ってください．スレの形式にしてもいいです．エセ関西弁で．4センテンスくらいで．あおってください";
 
@@ -64,17 +66,23 @@ function ExecuteRequest({ count }) {
   };
 
   useEffect(() => {
-    // Claudeに投げるときはここをコメントアウト．入れ替える．
-    // if (count > 0) invokeModel();
+    // if (count > 0) invokeModel();      // Claudeに投げるときはここをコメントアウト．入れ替える．
+    setIsLoading(true);
     setMessage(`モデルを呼び出しました  ${count}`);
   }, [count]);
 
   useEffect(() => {
     console.log(message);
+    setIsLoading(false);
   }, [message]);
 
+  useEffect(() => {
+    changeIsLoading(isLoading);
+  }, [isLoading]);
+
   return (
-    <div>
+    <div className="text-container">
+      <div className={isLoading ? "loading" : ""}></div>
       <h3>{myPrompt}</h3>
       <div className="Execute">{message}</div>
     </div>

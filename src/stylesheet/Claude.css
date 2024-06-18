@@ -11,15 +11,25 @@
 }
 
 .Claude button{
-    font-size: 50px;
+    font-size: 2rem;
     background-color: #f5f5f5;
     cursor: pointer;
     border-radius: 10px;
-    font-size: 3em;
     padding: 10px 20px;
+    transition: 0.2s;
+    font-weight: bold;
 }
 
 .Claude button:hover{
+    color: #f5f5f5;
     background-color: hsl(215, 88%, 47%);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
     /* transform: scale(1.1); */
+}
+
+#loading-button{
+    color: #f5f5f5;
+    background-color: hsl(215, 88%, 47%, 0.5);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    pointer-events: none;
 }
