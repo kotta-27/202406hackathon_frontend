@@ -68,8 +68,7 @@ function ExecuteRequest({ count, changeIsLoading, checkedValue, items }) {
   useEffect(() => {
     if (checkedValue == "debug") {
       setMessage(`モデルを呼び出しました  ${count}`);
-    } // Claudeに投げるときはここをコメントアウト．入れ替える．
-    else if (checkedValue == "throw") {
+    } else if (checkedValue == "throw") {
       if (count > 0) invokeModel();
     }
     setIsLoading(true);
