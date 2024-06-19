@@ -17,11 +17,14 @@ const client = new BedrockRuntimeClient({
 });
 
 // モデルを呼び出す関数を実行
-function ExecuteRequest({ count, changeIsLoading, checkedValue, items }) {
+function ExecuteRequest({ count, changeIsLoading, checkedValue, items ,inputText}) {
   const [message, setMessage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const myPrompt = "課題が終わらない";
+  // const myPrompt = "課題が終わらない";
+  const myPrompt = inputText;
+
   const nanJ =
+  // "Please speak in a manner similar to 2channel users. You can use the format of a thread or speak in a Kansai dialect. Please provide about 4 sentences and be enthusiastic. You can output only Japanese."
     "なんJ民のような口調で語ってください．スレの形式にしてもいいです．エセ関西弁で．4センテンスくらいで．あおってください";
 
   // BedrockRuntimeClientのインスタンスを作成し、AWSのus-east-1リージョンを指定
