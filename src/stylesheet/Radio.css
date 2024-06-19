@@ -1,0 +1,17 @@
+label {
+    /* display: block; */
+}
+
+.items-container{
+    font-size: 1em;
+    font-weight: 700;
+    margin-top: 1%;
+    margin-bottom: 1%;
+}
+
+.radio-item{
+    flex-direction: row;
+    align-items: center;
+    margin-top: 1%;
+    margin-bottom: 1%;
+}

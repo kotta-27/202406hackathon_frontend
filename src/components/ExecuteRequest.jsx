@@ -17,10 +17,10 @@ const client = new BedrockRuntimeClient({
 });
 
 // モデルを呼び出す関数を実行
-function ExecuteRequest({ count, changeIsLoading }) {
+function ExecuteRequest({ count, changeIsLoading, checkedValue, items }) {
   const [message, setMessage] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  const myPrompt = "【悲報】今週のタスクがやばすぎる件wwww";
+  const myPrompt = "課題が終わらない";
   const nanJ =
     "なんJ民のような口調で語ってください．スレの形式にしてもいいです．エセ関西弁で．4センテンスくらいで．あおってください";
 
@@ -66,9 +66,13 @@ function ExecuteRequest({ count, changeIsLoading }) {
   };
 
   useEffect(() => {
-    // if (count > 0) invokeModel();      // Claudeに投げるときはここをコメントアウト．入れ替える．
+    if (checkedValue == "debug") {
+      setMessage(`モデルを呼び出しました  ${count}`);
+    } // Claudeに投げるときはここをコメントアウト．入れ替える．
+    else if (checkedValue == "throw") {
+      if (count > 0) invokeModel();
+    }
     setIsLoading(true);
-    setMessage(`モデルを呼び出しました  ${count}`);
   }, [count]);
 
   useEffect(() => {
