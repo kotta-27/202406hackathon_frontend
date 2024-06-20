@@ -14,7 +14,7 @@ function Claude() {
   const [count, setCount] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
   const [checkedValue, setCheckedValue] = useState(items[0].item);
-  const [inputText, setInputText] = useState('');
+  const [inputText, setInputText] = useState("");
 
   const changeIsLoading = (isLoadingChild) => {
     if (isLoadingChild) setIsLoading(true);
@@ -31,17 +31,14 @@ function Claude() {
 
   const handleInputSubmit = (inputText) => {
     setInputText(inputText);
-    // ここで入力データを処理するための追加ロジックを実装できます
-    // console.log("Received input:", inputText);
   };
 
   return (
     <div>
       <div className="Claude">
-        <h2>Claude Application</h2>
+        <h2>なんJnerator</h2>
 
         <InputForm onInputSubmit={handleInputSubmit} />
-        {/* {inputText && <div>Input Text: {inputText}</div>} */}
 
         <RadioButtonItems
           handleChange={handleChange}
