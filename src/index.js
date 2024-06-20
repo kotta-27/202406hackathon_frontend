@@ -4,11 +4,13 @@ import './stylesheet/index.css';
 import App from './components/App';
 import Claude from './components/Claude';
 import reportWebVitals from './reportWebVitals';
+import GetToken from './components/GetToken';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
     <App />
+    <GetToken />
     <Claude />
   </React.StrictMode>
 );

@@ -1,7 +1,7 @@
 import React from "react";
 import { useState } from "react";
 import "../stylesheet/Claude.css";
-import ExecuteRequest from "./ExecuteRequest";
+import CallClaudeLambda from "./CallClaudeLambda";
 import RadioButtonItems from "./RadioButtonItems";
 import InputForm from "./InputForm";
 
@@ -51,12 +51,8 @@ function Claude() {
         >
           Send request
         </button>
-        <ExecuteRequest
-          count={count}
-          changeIsLoading={changeIsLoading}
-          checkedValue={checkedValue}
-          items={items}
-          inputText={inputText}
+        <CallClaudeLambda
+
         />
       </div>
     </div>
