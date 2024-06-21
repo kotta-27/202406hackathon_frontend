@@ -20,13 +20,27 @@ function ExecuteRequest({ count, changeIsLoading, checkedValue, inputText }) {
 
   const myPrompt = inputText;
   const systemPrompt = `
-    あなたはなんJ民です．2Chのスレッドを立ててください．なお，エセ関西弁を用いて，とても煽り口調で書いてくだい
-    形式は以下の通りです．以下の情報のJSON形式のリストで返してください:
-    名前，時間，スレ内容．名前は，風吹けば名無しなど．なんJ民らしい名前をつけてください．
+    あなたはなんJ民です.2Chのスレッドを立ててください．なお，エセ関西弁を用いて，とても煽り口調で書いてくだい
+    返答は, json形式で返してください. 
+    形式は以下の通りです
+    [
+      {"title": "スレのタイトル"},
+        {
+          "name": "名前",
+          "time": "時間",
+          "content": "スレの内容"
+        },
+        {
+          "name": "名前",
+          "time": "時間",
+          "content": "スレの内容"
+        },
+        ...
+    ]
+    名前は，風吹けば名無しなど．なんJ民らしい名前をつけてください．
+    「はい, わかりました」等の返答は不要です.スレのタイトルから，スレの内容までをJson形式で返してください．
     必要におうじて安価をつけてください
     keyは英語に変換してください 例，名前 -> name
-    リストは3要素にしてください．
-    最初の要素は，title:"スレタイ”としてください．
   `;
 
   const params = {
@@ -56,9 +70,14 @@ function ExecuteRequest({ count, changeIsLoading, checkedValue, inputText }) {
       const responseBody = JSON.parse(responseBodyText);
       const responseText = responseBody.content[0].text;
       console.log("Response Text:", responseText);
-      const thread = JSON.parse(responseText);
-      setMessage(responseText);
-      setThreadJSON(thread);
+        const thread = JSON.parse(responseText);
+        setThreadJSON(thread);  // もし成功したら、スレッドの情報をセットする
+        setMessage(responseText);  
+        setThreadJSON(thread);
+
+
+      // const thread = JSON.parse(responseText);
+      // setMessage(responseText);
     } catch (error) {
       console.error("Error invoking model:", error);
       setMessage("Error invoking model");
@@ -97,10 +116,10 @@ function ExecuteRequest({ count, changeIsLoading, checkedValue, inputText }) {
       <div className="Execute">
         {threadJSON.map((thread, index) => (
           <div key={index}>
-            <p>
+            <p className="resInfo">
               {thread.name} : {thread.time}
             </p>
-            <p>{thread.content}</p>
+            <p className="resContent">{thread.content}</p>
           </div>
         ))}
       </div>
