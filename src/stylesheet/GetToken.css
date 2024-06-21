@@ -1,0 +1,21 @@
+.GetToken-header{
+    background-color: #0eb85b;
+    height: 5vh;
+    display: flex;
+    /* border-bottom:rgb(0, 157, 60) 0.5rem solid; */
+    /* flex-direction: column;
+    align-items: center;
+    justify-content: center; */
+    color: white;
+}
+
+.GetToken-header p{
+    align-items: left;
+    margin-left: 15px;
+    font-weight: bold;
+}
+
+.GetToken-header .login-link{
+    margin-left: 10px;
+    font-size: 1rem;
+}

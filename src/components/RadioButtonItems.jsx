@@ -1,4 +1,3 @@
-import { useState } from "react";
 import "../stylesheet/Radio.css";
 
 function RadioButtonItems({ handleChange, checkedValue, items }) {

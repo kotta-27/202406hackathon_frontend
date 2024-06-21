@@ -1,42 +1,74 @@
-function GetToken() {
-  // URLから認証コードを取得
-  const urlParams = new URLSearchParams(window.location.search);
-  const authCode = urlParams.get('code');
+import React, { useEffect, useState } from "react";
+import { jwtDecode } from "jwt-decode";
+import "../stylesheet/GetToken.css";
 
-  // 認証コードを使ってトークンを取得
-  async function getToken(authCode) {
-      const clientId = '5u76s45jojp2gkh02i6ou7davf';  // CognitoのApp Client ID
-      const redirectUri = 'http://localhost:3000';
-      const userPoolDomain = 'omuraisu-test-userpool.auth.us-east-1.amazoncognito.com';  // CognitoのUser Pool Domain
+function GetToken({ handleToken }) {
+  const [isAuthorized, setIsAuthorized] = useState(false);
+  const [userName, setUserName] = useState("");
 
-      const response = await fetch(`https://${userPoolDomain}/oauth2/token`, {
-          method: 'POST',
-          headers: {
-              'Content-Type': 'application/x-www-form-urlencoded'
-          },
-          body: new URLSearchParams({
-              'grant_type': 'authorization_code',
-              'client_id': clientId,
-              'redirect_uri': redirectUri,
-              'code': authCode
-          })
-      });
-      const tokens = await response.json();
-      console.log(tokens);
-      return tokens.id_token;
-  }
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const authCode = urlParams.get("code");
 
-  // トークンを取得して表示
-    getToken(authCode).then(idToken => {
-      console.log(idToken);
-      //document.body.innerHTML = `<h1>Token received:</h1><pre>${idToken}</pre>`;
-  }).catch(error => {
-      console.error('Error:', error);
-      //document.body.innerHTML = `<h1>Error occurred:</h1><pre>${error.message}</pre>`;
-  });
+    if (authCode && !isAuthorized) {
+      getToken(authCode)
+        .then((responsedIdTokenData) => {
+          const responsedIdToken = String(responsedIdTokenData);
+          handleToken(responsedIdToken);
+          setIsAuthorized(true);
+
+          // デコードしてユーザー名を取得
+          const decodedToken = jwtDecode(responsedIdToken);
+          const userName = String(decodedToken["cognito:username"]); // ユーザー名のクレームを確認する
+          setUserName(userName);
+        })
+        .catch((error) => {
+          console.error("Error:", error);
+        });
+    }
+  }, [isAuthorized, handleToken]);
+
+  const getToken = async (authCode) => {
+    const clientId = "5u76s45jojp2gkh02i6ou7davf"; // CognitoのApp Client ID
+    const redirectUri = "http://localhost:3000";
+    const userPoolDomain =
+      "omuraisu-test-userpool.auth.us-east-1.amazoncognito.com"; // CognitoのUser Pool Domain
+
+    const response = await fetch(`https://${userPoolDomain}/oauth2/token`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/x-www-form-urlencoded",
+      },
+      body: new URLSearchParams({
+        grant_type: "authorization_code",
+        client_id: clientId,
+        redirect_uri: redirectUri,
+        code: authCode,
+      }),
+    });
+    const tokens = await response.json();
+    return tokens.id_token;
+  };
+
   return (
     <div className="GetToken">
-      <header className="GetToken-header"></header>
+      <header className="GetToken-header">
+        {isAuthorized && userName != "" ? (
+          <div>
+            <p>Welcome, {userName}!</p>
+          </div>
+        ) : (
+          <p>
+            !NOT AUTHORIZED!
+            <a
+              className="login-link"
+              href="https://omuraisu-test-userpool.auth.us-east-1.amazoncognito.com/oauth2/authorize?client_id=5u76s45jojp2gkh02i6ou7davf&response_type=code&scope=email+openid+phone&redirect_uri=http%3A%2F%2Flocalhost%3A3000"
+            >
+              Please Login Again
+            </a>
+          </p>
+        )}
+      </header>
     </div>
   );
 }

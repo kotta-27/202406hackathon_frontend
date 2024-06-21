@@ -3,10 +3,11 @@ label {
 }
 
 .items-container{
-    font-size: 1em;
-    font-weight: 700;
-    margin-top: 1%;
-    margin-bottom: 1%;
+    display: flex;
+    font-weight: bolder;
+    justify-content: flex-end;
+    font-size: 20px;
+    margin: 5px 15px 1px 1px; 
 }
 
 .radio-item{

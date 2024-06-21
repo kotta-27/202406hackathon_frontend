@@ -4,13 +4,14 @@ import "../stylesheet/Claude.css";
 import CallClaudeLambda from "./CallClaudeLambda";
 import RadioButtonItems from "./RadioButtonItems";
 import InputForm from "./InputForm";
+import GetToken from "./GetToken";
 
 const items = [
   { id: 1, item: "debug" },
   { id: 2, item: "throw" },
 ];
 
-function Claude() {
+function Claude({ myIdToken }) {
   const [count, setCount] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
   const [checkedValue, setCheckedValue] = useState(items[0].item);
@@ -36,24 +37,15 @@ function Claude() {
   return (
     <div>
       <div className="Claude">
-        <h2>なんJnerator</h2>
-
-        <InputForm onInputSubmit={handleInputSubmit} />
-
+        {/* <InputForm onInputSubmit={handleInputSubmit} /> */}
         <RadioButtonItems
           handleChange={handleChange}
           checkedValue={checkedValue}
           items={items}
+          className="RadioButtonItems"
         />
-        <button
-          onMouseDown={createRequest}
-          id={isLoading ? "loading-button" : ""}
-        >
-          Send request
-        </button>
-        <CallClaudeLambda
-
-        />
+        <h2>なんJnerator</h2>
+        <CallClaudeLambda myIdToken={myIdToken} />
       </div>
     </div>
   );
