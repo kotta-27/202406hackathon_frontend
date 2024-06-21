@@ -39,7 +39,7 @@ function ExecuteRequest({ count, changeIsLoading, checkedValue, inputText }) {
     ]
     名前は，風吹けば名無しなど．なんJ民らしい名前をつけてください．
     「はい, わかりました」等の返答は不要です.スレのタイトルから，スレの内容までをJson形式で返してください．
-    必要におうじて安価をつけてください
+    必要に応じて安価をつけてください
     keyは英語に変換してください 例，名前 -> name
   `;
 
