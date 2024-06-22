@@ -29,10 +29,10 @@ function GetToken({ handleToken }) {
   }, [isAuthorized, handleToken]);
 
   const getToken = async (authCode) => {
-    const clientId = "5u76s45jojp2gkh02i6ou7davf"; // CognitoのApp Client ID
+    const clientId = "f3om54e8nkgfkp3duo56rolhe"; // CognitoのApp Client ID
     const redirectUri = "http://localhost:3000";
     const userPoolDomain =
-      "omuraisu-test-userpool.auth.us-east-1.amazoncognito.com"; // CognitoのUser Pool Domain
+      "202406hackathonkaba.auth.us-west-2.amazoncognito.com"; // CognitoのUser Pool Domain
 
     const response = await fetch(`https://${userPoolDomain}/oauth2/token`, {
       method: "POST",
@@ -62,7 +62,7 @@ function GetToken({ handleToken }) {
             !NOT AUTHORIZED!
             <a
               className="login-link"
-              href="https://omuraisu-test-userpool.auth.us-east-1.amazoncognito.com/oauth2/authorize?client_id=5u76s45jojp2gkh02i6ou7davf&response_type=code&scope=email+openid+phone&redirect_uri=http%3A%2F%2Flocalhost%3A3000"
+              href="https://202406hackathonkaba.auth.us-west-2.amazoncognito.com/oauth2/authorize?client_id=f3om54e8nkgfkp3duo56rolhe&response_type=code&scope=email+openid+phone&redirect_uri=http%3A%2F%2Flocalhost%3A3000"
             >
               Please Login Again
             </a>

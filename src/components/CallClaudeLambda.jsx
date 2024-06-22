@@ -14,10 +14,14 @@ const CallClaudeLambda = ({ myIdToken }) => {
   const invokeLambda = async () => {
     if (isSafe) var safeString = "safe-";
     else var safeString = "";
+    // const url =
+    //   "https://jj247o7l14.execute-api.us-east-1.amazonaws.com/hackathonStage/claude3/" +
+    //   safeString +
+    //   "keijiban"; // API Gatewayのエンドポイント
     const url =
-      "https://jj247o7l14.execute-api.us-east-1.amazonaws.com/hackathonStage/claude3/" +
+      "https://k0btfvyqx5.execute-api.us-west-2.amazonaws.com/2024hackathon/claude3/" +
       safeString +
-      "keijiban"; // API Gatewayのエンドポイント
+      "keijiban";
     const idToken = myIdToken; // Cognitoから取得したIDトークン
 
     setIsLoading(true);
