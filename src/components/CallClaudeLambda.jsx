@@ -10,6 +10,7 @@ const CallClaudeLambda = ({ myIdToken }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [isSafe, setIsSafe] = useState(false);
   const [jsonURL, setJsonURL] = useState("");
+  const [threadValue, setThreadValue] = useState(10);
 
   const invokeLambda = async () => {
     if (isSafe) var safeString = "safe-";
@@ -81,6 +82,10 @@ const CallClaudeLambda = ({ myIdToken }) => {
     else setIsSafe(false);
   }, [threadNum]);
 
+  const changeThreadValue = (e) => {
+    setThreadValue(e.target.value);
+  };
+
   return (
     <div style={{ display: "flex", flexDirection: "column", margin: "20px" }}>
       <input
@@ -104,6 +109,12 @@ const CallClaudeLambda = ({ myIdToken }) => {
           onChange={(e) => setThreadNum(e.target.value)}
           placeholder="スレ数"
         />
+        <input
+          className="thread-gage"
+          type="range"
+          value={threadValue}
+          onChange={changeThreadValue}
+        />
         <div className={isLoading ? "loading" : ""}></div>
       </div>
       <div className="content-container">
@@ -125,9 +136,10 @@ const CallClaudeLambda = ({ myIdToken }) => {
           </div>
         )}
         {error && <div>Error: {error}</div>}
-        <a href={jsonURL} download="thread.json">
+        {/* <a href={jsonURL} download="thread.json">
           ふふh
-        </a>
+        </a> */}
+        <p>{threadValue}</p>
       </div>
     </div>
   );
