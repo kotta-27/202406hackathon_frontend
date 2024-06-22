@@ -4,6 +4,22 @@
     margin-right: auto;
     width: 50%;
 }
+
+.thread-num-input{
+    height: 1.8em;
+    margin-top: 10px;
+    margin-left: 10px;
+    margin-right: 10px;
+    font-size: 1.5rem;
+    padding: auto auto;
+    background-color: #f5f5f5;
+    cursor: pointer;
+    border-radius: 10px;
+    padding: auto 200px auto 200px;
+    transition: 0.2s;
+    font-weight: bold;
+    width: 90px;
+}
 .button-container{
     margin-top: 10px;
 }
@@ -13,23 +29,59 @@
     margin-top: 10px;
     margin-left: auto;
     margin-right: auto;
-    font-size: 2rem;
+    font-size: 1.5rem;
+    padding: auto auto;
     background-color: #f5f5f5;
     cursor: pointer;
     border-radius: 10px;
-    padding: 10px 20px;
+    padding: auto 200px auto 200px;
     transition: 0.2s;
     font-weight: bold;
-    width: 50%;
+    width: 100px;
 }
 
 .content-container{
-    background-color: rgb(0, 97, 18);
+    background-color: rgb(235, 235, 235);
+    padding-left:10px ;
+    font-size: 1em;
     min-height: 60vh;
     margin-top: 1vh;
-    border: black 10px solid;
-    color: aliceblue;
+    border: rgb(64, 67, 68) 2px solid;
+    color: rgb(0, 0, 0);
     padding: auto;
+}
+
+.thread-title{
+    color: red;
+    font-size: 1em;
+    font-weight: bold;
+    display: end;
+    margin-top: 10px;
+    font-size: 1.5em;
+    text-align: left;
+}
+
+.post-container{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    padding: 0;
+}
+
+.username{
+    color: rgb(40, 205, 40);
+    font-size: 1em;
+    font-weight: bold;
+}
+
+.userinfo{
+    float: left;
+    text-align: left;
+}
+.content{
+    margin: 0;
+    text-align: left;
+    padding-left : 80px;
 }
 
 .loading {

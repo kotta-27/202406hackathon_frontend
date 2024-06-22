@@ -38,12 +38,13 @@ function Claude({ myIdToken }) {
     <div>
       <div className="Claude">
         {/* <InputForm onInputSubmit={handleInputSubmit} /> */}
-        <RadioButtonItems
+        {/* <RadioButtonItems
           handleChange={handleChange}
           checkedValue={checkedValue}
           items={items}
           className="RadioButtonItems"
-        />
+        /> */}
+        <img className="image" src="sad_002.png" />
         <h2>なんJnerator</h2>
         <CallClaudeLambda myIdToken={myIdToken} />
       </div>
