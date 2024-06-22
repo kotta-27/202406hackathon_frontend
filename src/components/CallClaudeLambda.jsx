@@ -10,18 +10,15 @@ const CallClaudeLambda = ({ myIdToken }) => {
   const [isLoading, setIsLoading] = useState(false);
   const [isSafe, setIsSafe] = useState(false);
   const [jsonURL, setJsonURL] = useState("");
-  const [threadValue, setThreadValue] = useState(10);
+  const [crazyLevel, setCrazyLevel] = useState(1);
 
   const invokeLambda = async () => {
-    if (isSafe) var safeString = "safe-";
-    else var safeString = "";
-    // const url =
-    //   "https://jj247o7l14.execute-api.us-east-1.amazonaws.com/hackathonStage/claude3/" +
-    //   safeString +
-    //   "keijiban"; // API Gatewayのエンドポイント
+    // if (isSafe) var safeString = "safe-";
+    // else var safeString = "";
+
     const url =
       "https://k0btfvyqx5.execute-api.us-west-2.amazonaws.com/2024hackathon/claude3/" +
-      safeString +
+      String(crazyLevel) +
       "keijiban";
     const idToken = myIdToken; // Cognitoから取得したIDトークン
 
@@ -34,6 +31,7 @@ const CallClaudeLambda = ({ myIdToken }) => {
     const data = {
       prompt: prompt,
       length: threadNum,
+      level: crazyLevel,
     };
 
     try {
@@ -77,13 +75,13 @@ const CallClaudeLambda = ({ myIdToken }) => {
   };
 
   useEffect(() => {}, [isLoading]);
-  useEffect(() => {
-    if (threadNum == 10) setIsSafe(true);
-    else setIsSafe(false);
-  }, [threadNum]);
+  // useEffect(() => {
+  //   if (threadNum == 10) setIsSafe(true);
+  //   else setIsSafe(false);
+  // }, [threadNum]);
 
-  const changeThreadValue = (e) => {
-    setThreadValue(e.target.value);
+  const changeCrazyLevel = (e) => {
+    setCrazyLevel(e.target.value);
   };
 
   return (
@@ -110,10 +108,13 @@ const CallClaudeLambda = ({ myIdToken }) => {
           placeholder="スレ数"
         />
         <input
-          className="thread-gage"
+          className="thread-gauge"
           type="range"
-          value={threadValue}
-          onChange={changeThreadValue}
+          min = "1"
+          max = "5"
+          step = "1"
+          value={crazyLevel}
+          onChange={changeCrazyLevel}
         />
         <div className={isLoading ? "loading" : ""}></div>
       </div>
@@ -139,7 +140,7 @@ const CallClaudeLambda = ({ myIdToken }) => {
         {/* <a href={jsonURL} download="thread.json">
           ふふh
         </a> */}
-        <p>{threadValue}</p>
+        <p>{crazyLevel}</p>
       </div>
     </div>
   );
