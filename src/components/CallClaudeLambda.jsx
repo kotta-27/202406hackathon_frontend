@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import "../stylesheet/CallClaude.css";
+import RadioButtonItems from "./RadioButtonItems";
 
 const CallClaudeLambda = ({ myIdToken }) => {
   const [prompt, setPrompt] = useState("");
@@ -11,9 +12,21 @@ const CallClaudeLambda = ({ myIdToken }) => {
   const [crazyLevel, setCrazyLevel] = useState(1);
   const [imageUrl, setImageUrl] = useState("");
 
+  const items = [
+    { id: 1, item: "nanj" },
+    { id: 2, item: "girl" },
+    { id: 3, item: "boy" },
+  ];
+
+  const [checkedValue, setCheckedValue] = useState(items[0].item);
+
+
   const invokeTextLambda = async () => {
     const url =
       "https://k0btfvyqx5.execute-api.us-west-2.amazonaws.com/2024hackathon/claude3/keijiban";
+      // if (checkedValue == "nanj") {
+      //   url += "/keijiban";  
+      // }
     const idToken = myIdToken;
 
     setIsLoading(true);
@@ -136,6 +149,11 @@ const CallClaudeLambda = ({ myIdToken }) => {
     setCrazyLevel(e.target.value);
   };
 
+  const handleChange = (e) => {
+    setCheckedValue(e.target.value);
+  };
+
+
   return (
     <div style={{ display: "flex", flexDirection: "column", margin: "20px" }}>
       <input
@@ -168,6 +186,13 @@ const CallClaudeLambda = ({ myIdToken }) => {
           value={crazyLevel}
           onChange={changeCrazyLevel}
         />
+
+        <RadioButtonItems 
+          handleChange={handleChange}
+          checkedValue={checkedValue}
+          items={items}
+        />
+
         <div className={isLoading ? "loading" : ""}></div>
       </div>
       <div className="content-container">
