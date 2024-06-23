@@ -47,8 +47,6 @@ const CallClaudeLambda = ({ myIdToken }) => {
       const styledMessage = responseMessage.message.substring(responseMessage.message.indexOf("[",));
       const responseJsonMessage = JSON.parse(styledMessage);
       console.log("Response Message:", responseJsonMessage);
-      // console.log(typeof responseJsonMessage);
-      const responseJsonMessage = JSON.parse(responseMessage.message);
 
       const fileName = "thread";
       const fileNameWithJson = `${fileName}.json`;
