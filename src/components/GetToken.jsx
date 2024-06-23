@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { jwtDecode } from "jwt-decode";
 import "../stylesheet/GetToken.css";
 
-function GetToken({ handleToken }) {
+function GetToken({ handleToken, handleUserName }) {
   const [isAuthorized, setIsAuthorized] = useState(false);
   const [userName, setUserName] = useState("");
 
@@ -21,12 +21,13 @@ function GetToken({ handleToken }) {
           const decodedToken = jwtDecode(responsedIdToken);
           const userName = String(decodedToken["cognito:username"]); // ユーザー名のクレームを確認する
           setUserName(userName);
+          handleUserName(userName);
         })
         .catch((error) => {
           console.error("Error:", error);
         });
     }
-  }, [isAuthorized, handleToken]);
+  }, [isAuthorized, handleToken, handleUserName]);
 
   const getToken = async (authCode) => {
     const clientId = "f3om54e8nkgfkp3duo56rolhe"; // CognitoのApp Client ID

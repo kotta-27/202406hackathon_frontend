@@ -11,7 +11,7 @@ const items = [
   { id: 2, item: "throw" },
 ];
 
-function Claude({ myIdToken }) {
+function Claude({ myIdToken, myUserName }) {
   const [count, setCount] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
   const [checkedValue, setCheckedValue] = useState(items[0].item);
@@ -46,7 +46,7 @@ function Claude({ myIdToken }) {
         /> */}
         {/* <img className="image" src="sad_002.png" /> */}
         <h2>なんJnerator</h2>
-        <CallClaudeLambda myIdToken={myIdToken} />
+        <CallClaudeLambda myIdToken={myIdToken} myUserName={myUserName} />
       </div>
     </div>
   );

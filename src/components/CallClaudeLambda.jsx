@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
+import RadioButtonItems from "./RadioButtonItems";
 import "../stylesheet/CallClaude.css";
 
-const CallClaudeLambda = ({ myIdToken }) => {
+const CallClaudeLambda = ({ myIdToken, myUserName }) => {
   const [prompt, setPrompt] = useState("");
-  const [threadNum, setThreadNum] = useState(1);
+  const [threadNum, setThreadNum] = useState(10);
   const [responseArray, setResponseArray] = useState([]);
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -15,9 +16,25 @@ const CallClaudeLambda = ({ myIdToken }) => {
   const [replyArray, setReplyArray] = useState([]);
   const [isReplyExist, setIsReplyExist] = useState(false);
 
+  const items = [
+    { id: 0, item: "nanj" },
+    { id: 1, item: "otaku" },
+    { id: 2, item: "dk" },
+    { id: 3, item: "ojo" },
+    { id: 4, item: "mtg" },
+    { id: 5, item: "mouko" },
+    { id: 6, item: "safe" },
+  ];
+
+  const [checkedValue, setCheckedValue] = useState(items[0].item);
+  const [checkedId, setCheckedId] = useState(items[0].id);
+  console.log("checkedId:", checkedId);
+
   const invokeTextLambda = async () => {
+    setReplyArray([]);
     const url =
-      "https://k0btfvyqx5.execute-api.us-west-2.amazonaws.com/2024hackathon/claude3/keijiban";
+      "https://k0btfvyqx5.execute-api.us-west-2.amazonaws.com/2024hackathon/claude3/keijiban-" +
+      String(checkedId);
     const idToken = myIdToken;
 
     setIsLoading(true);
@@ -194,6 +211,14 @@ const CallClaudeLambda = ({ myIdToken }) => {
     setIsLoading(false);
   };
 
+  const handleChange = (e) => {
+    const selectedValue = e.target.value;
+    setCheckedValue(selectedValue);
+    const selectedItem = items.find((item) => item.item === selectedValue);
+    if (selectedItem) {
+      setCheckedId(selectedItem.id);
+    }
+  };
   useEffect(() => {}, [isLoading]);
 
   const changeCrazyLevel = (e) => {
@@ -230,15 +255,25 @@ const CallClaudeLambda = ({ myIdToken }) => {
           onChange={(e) => setThreadNum(e.target.value)}
           placeholder="スレ数"
         />
-        <input
-          className="thread-gauge"
-          type="range"
-          min="1"
-          max="5"
-          step="1"
-          value={crazyLevel}
-          onChange={changeCrazyLevel}
+        <div>
+          <span>口の悪さ</span>
+          <input
+            className="thread-gauge"
+            type="range"
+            min="1"
+            max="5"
+            step="1"
+            value={crazyLevel}
+            onChange={changeCrazyLevel}
+          />
+        </div>
+
+        <RadioButtonItems
+          handleChange={handleChange}
+          checkedValue={checkedValue}
+          items={items}
         />
+
         <div className={isLoading ? "loading" : ""}></div>
       </div>
       <div className="content-container">
@@ -289,7 +324,7 @@ const CallClaudeLambda = ({ myIdToken }) => {
           <div className="post-container">
             <p className="userinfo">
               {parseInt(threadNum) + 1} 名前：
-              <span className="username">test</span>
+              <span className="username">{myUserName}</span>
               {": "}
               {responseArray[responseArray.length - 1].time} @YOU
             </p>
@@ -313,8 +348,8 @@ const CallClaudeLambda = ({ myIdToken }) => {
           </div>
         )}
         {error && <div>Error: {error}</div>}
-        <p>{crazyLevel}</p>
-        <a href={jsonURL}>aa</a>
+        {/* <p>{crazyLevel}</p> */}
+        {/* <a href={jsonURL}>aa</a> */}
       </div>
     </div>
   );
