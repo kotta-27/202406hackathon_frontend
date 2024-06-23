@@ -79,6 +79,7 @@ const CallClaudeLambda = ({ myIdToken, myUserName }) => {
       setJsonURL(jsonURLTemp);
 
       setResponseArray(responseJsonMessage);
+      setIsReplyExist(true);
       console.log("Response:", responseJsonMessage);
       setError(null);
     } catch (error) {
