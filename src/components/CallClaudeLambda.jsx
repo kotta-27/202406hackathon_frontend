@@ -22,7 +22,7 @@ const CallClaudeLambda = ({ myIdToken, myUserName }) => {
     { id: 2, item: "dk" },
     { id: 3, item: "ojo" },
     { id: 4, item: "mtg" },
-    { id: 5, item: "mouko" },
+    // { id: 5, item: "mouko" },
     { id: 6, item: "safe" },
   ];
 
