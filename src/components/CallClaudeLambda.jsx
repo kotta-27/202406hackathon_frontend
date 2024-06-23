@@ -18,7 +18,7 @@ const CallClaudeLambda = ({ myIdToken }) => {
 
     const url =
       "https://k0btfvyqx5.execute-api.us-west-2.amazonaws.com/2024hackathon/claude3/" +
-      String(crazyLevel) +
+      // String(crazyLevel) +
       "keijiban";
     const idToken = myIdToken; // Cognitoから取得したIDトークン
 
@@ -50,7 +50,8 @@ const CallClaudeLambda = ({ myIdToken }) => {
       const responseJson = JSON.parse(responseText);
       const responseMessage = JSON.parse(responseJson.body);
       console.log("Response Message:", responseMessage);
-      const responseJsonMessage = JSON.parse(responseMessage.message);
+      const styledMessage = responseMessage.message.substring(responseMessage.message.indexOf("[",));
+      const responseJsonMessage = JSON.parse(styledMessage);
       console.log("Response Message:", responseJsonMessage);
       // console.log(typeof responseJsonMessage);
 
