@@ -4,26 +4,17 @@ import "../stylesheet/CallClaude.css";
 const CallClaudeLambda = ({ myIdToken }) => {
   const [prompt, setPrompt] = useState("");
   const [threadNum, setThreadNum] = useState(10);
-  const [response, setResponse] = useState(null);
   const [responseArray, setResponseArray] = useState([]);
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
-  const [isSafe, setIsSafe] = useState(false);
   const [jsonURL, setJsonURL] = useState("");
-  const [threadValue, setThreadValue] = useState(10);
+  const [crazyLevel, setCrazyLevel] = useState(1);
+  const [imageUrl, setImageUrl] = useState("");
 
-  const invokeLambda = async () => {
-    if (isSafe) var safeString = "safe-";
-    else var safeString = "";
-    // const url =
-    //   "https://jj247o7l14.execute-api.us-east-1.amazonaws.com/hackathonStage/claude3/" +
-    //   safeString +
-    //   "keijiban"; // API Gatewayのエンドポイント
+  const invokeTextLambda = async () => {
     const url =
-      "https://k0btfvyqx5.execute-api.us-west-2.amazonaws.com/2024hackathon/claude3/" +
-      safeString +
-      "keijiban";
-    const idToken = myIdToken; // Cognitoから取得したIDトークン
+      "https://k0btfvyqx5.execute-api.us-west-2.amazonaws.com/2024hackathon/claude3/keijiban";
+    const idToken = myIdToken;
 
     setIsLoading(true);
 
@@ -34,6 +25,7 @@ const CallClaudeLambda = ({ myIdToken }) => {
     const data = {
       prompt: prompt,
       length: threadNum,
+      level: crazyLevel,
     };
 
     try {
@@ -43,7 +35,7 @@ const CallClaudeLambda = ({ myIdToken }) => {
         headers: headers,
         body: JSON.stringify(data),
       });
-      // console.log("Response received:", response);
+
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
       }
@@ -51,10 +43,7 @@ const CallClaudeLambda = ({ myIdToken }) => {
       const responseText = await response.text();
       const responseJson = JSON.parse(responseText);
       const responseMessage = JSON.parse(responseJson.body);
-      console.log("Response Message:", responseMessage);
       const responseJsonMessage = JSON.parse(responseMessage.message);
-      console.log("Response Message:", responseJsonMessage);
-      // console.log(typeof responseJsonMessage);
 
       const fileName = "thread";
       const fileNameWithJson = `${fileName}.json`;
@@ -65,10 +54,7 @@ const CallClaudeLambda = ({ myIdToken }) => {
       setJsonURL(jsonURLTemp);
 
       setResponseArray(responseJsonMessage);
-      // console.log(responseArray);
       setError(null);
-
-      // console.log("Response JSON:", responseJson["body"]);
     } catch (error) {
       console.error("Error during request:", error);
       setError("リクエストの送信中にエラーが発生しました: " + error.message);
@@ -76,14 +62,75 @@ const CallClaudeLambda = ({ myIdToken }) => {
     setIsLoading(false);
   };
 
-  useEffect(() => {}, [isLoading]);
-  useEffect(() => {
-    if (threadNum == 10) setIsSafe(true);
-    else setIsSafe(false);
-  }, [threadNum]);
+  const fetchImageFromBedrock = async () => {
+    var seed = Math.floor(Math.random() * 10000);
+    console.log("image Seed:", seed);
+    const data = {
+      style_preset: "photographic",
+      text_prompts: [
+        {
+          text: `
+                you are a famous advertising agency designer.  
+                please generate ultimate hight quality real 
+                photographic advertising on the internet.
+                for example, game, application, and so on.
+                or the image of ${prompt}.
+                `,
+          weight: 0.8,
+        },
+      ],
+      model_id: "stability.stable-diffusion-xl-v1",
+      cfg_scale: 10,
+      seed: seed,
+      steps: 100,
+      width: 512,
+      height: 512,
+    };
 
-  const changeThreadValue = (e) => {
-    setThreadValue(e.target.value);
+    const myHeaders = {
+      "Content-Type": "application/json",
+      Authorization: myIdToken,
+    };
+    const requestOptions = {
+      method: "POST",
+      headers: myHeaders,
+      body: JSON.stringify(data),
+      redirect: "follow",
+    };
+
+    try {
+      const response = await fetch(
+        "https://k0btfvyqx5.execute-api.us-west-2.amazonaws.com/2024hackathon/adimage",
+        requestOptions
+      );
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const result = await response.json();
+      console.log("Image result:", result);
+
+      const resBody = JSON.parse(result.body);
+      const binaryData = resBody.image;
+      setImageUrl("data:image/png;base64," + binaryData);
+    } catch (error) {
+      console.error("Error fetching image:", error);
+      setError("画像の取得中にエラーが発生しました: " + error.message);
+    }
+  };
+
+  const handleGenerate = async () => {
+    setIsLoading(true);
+    await invokeTextLambda();
+    await fetchImageFromBedrock();
+    setIsLoading(false);
+  };
+
+  useEffect(() => {}, [isLoading]);
+
+  const changeCrazyLevel = (e) => {
+    setCrazyLevel(e.target.value);
   };
 
   return (
@@ -98,7 +145,7 @@ const CallClaudeLambda = ({ myIdToken }) => {
       <div className="button-container">
         <button
           className={`input-button  ${isLoading ? "loadingButton" : ""}`}
-          onClick={invokeLambda}
+          onClick={handleGenerate}
         >
           生成
         </button>
@@ -110,10 +157,13 @@ const CallClaudeLambda = ({ myIdToken }) => {
           placeholder="スレ数"
         />
         <input
-          className="thread-gage"
+          className="thread-gauge"
           type="range"
-          value={threadValue}
-          onChange={changeThreadValue}
+          min="1"
+          max="5"
+          step="1"
+          value={crazyLevel}
+          onChange={changeCrazyLevel}
         />
         <div className={isLoading ? "loading" : ""}></div>
       </div>
@@ -127,19 +177,25 @@ const CallClaudeLambda = ({ myIdToken }) => {
                   <p className="userinfo">
                     {res.index} 名前：
                     <span className="username">{res.name}</span>
-                    {index != 0 && ":"} {res.time} {res.id}
+                    {index !== 0 && ":"} {res.time} {res.id}
                   </p>
                   <p className="content">{res.content}</p>
+                  {index > 1 && index % 5 === 0 && imageUrl && (
+                    <div className="image-container">
+                      <img
+                        className="my-image"
+                        src={imageUrl}
+                        alt="Generated"
+                      />
+                    </div>
+                  )}
                 </div>
               ))}
             </div>
           </div>
         )}
         {error && <div>Error: {error}</div>}
-        {/* <a href={jsonURL} download="thread.json">
-          ふふh
-        </a> */}
-        <p>{threadValue}</p>
+        <p>{crazyLevel}</p>
       </div>
     </div>
   );

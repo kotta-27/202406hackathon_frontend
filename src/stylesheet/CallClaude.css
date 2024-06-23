@@ -84,6 +84,16 @@
     padding-left : 80px;
 }
 
+.image-container{
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.my-image{
+    width: 20%;
+    height: 20%;
+}
+
 .loading {
     width: 2em;
     height: 2em;
