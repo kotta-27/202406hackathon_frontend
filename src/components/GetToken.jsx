@@ -63,7 +63,7 @@ function GetToken({ handleToken, handleUserName }) {
             !NOT AUTHORIZED!
             <a
               className="login-link"
-              href="https://202406hackathonkaba.auth.us-west-2.amazoncognito.com/oauth2/authorize?client_id=f3om54e8nkgfkp3duo56rolhe&response_type=code&scope=email+openid+phone&redirect_uri=http%3A%2F%2Flocalhost%3A3000"
+              href="https://202406hackathonkaba.auth.us-west-2.amazoncognito.com/oauth2/authorize?client_id=f3om54e8nkgfkp3duo56rolhe&response_type=code&scope=email+openid+phone&redirect_uri=https%3A%2F%2F202406hackathon-frontend.vercel.app%2F"
             >
               Please Login Again
             </a>
