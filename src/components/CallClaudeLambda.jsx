@@ -164,12 +164,8 @@ const CallClaudeLambda = ({ myIdToken }) => {
         placeholder="キーワードを入力してください"
       />
       <div className="button-container">
-        <button
-          className={`input-button  ${isLoading ? "loadingButton" : ""}`}
-          onClick={handleGenerate}
-        >
-          生成
-        </button>
+        {/* <br></br> */}
+        レス数
         <input
           className="thread-num-input"
           type="number"
@@ -177,6 +173,7 @@ const CallClaudeLambda = ({ myIdToken }) => {
           onChange={(e) => setThreadNum(e.target.value)}
           placeholder="スレ数"
         />
+        危険度
         <input
           className="thread-gauge"
           type="range"
@@ -192,6 +189,13 @@ const CallClaudeLambda = ({ myIdToken }) => {
           checkedValue={checkedValue}
           items={items}
         />
+
+        <button
+          className={`input-button  ${isLoading ? "loadingButton" : ""}`}
+          onClick={handleGenerate}
+        >
+          生成
+        </button>
 
         <div className={isLoading ? "loading" : ""}></div>
       </div>

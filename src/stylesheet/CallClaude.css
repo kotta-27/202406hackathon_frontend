@@ -22,6 +22,13 @@
 }
 .button-container{
     margin-top: 10px;
+    margin-left: 30%;
+    margin-right: 30%;
+    padding: 10px;
+    /* border: #f50000; */
+    border: thick double #4f4f4f;
+    background-color: #d8d8d8;
+
 }
 
 .input-button{
