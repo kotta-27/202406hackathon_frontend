@@ -138,3 +138,11 @@ to {
 .reply-exist{
     display: none;
 }
+
+.loadingButton{
+    color: #f5f5f5;
+    background-color: hsl(215, 88%, 47%, 0.5);
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+    pointer-events: none;
+    border: none;
+}

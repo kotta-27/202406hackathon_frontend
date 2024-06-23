@@ -242,12 +242,8 @@ const CallClaudeLambda = ({ myIdToken, myUserName }) => {
         placeholder="キーワードを入力してください"
       />
       <div className="button-container">
-        <button
-          className={`input-button  ${isLoading ? "loadingButton" : ""}`}
-          onClick={handleGenerate}
-        >
-          生成
-        </button>
+        {/* <br></br> */}
+        レス数
         <input
           className="thread-num-input"
           type="number"
@@ -255,25 +251,27 @@ const CallClaudeLambda = ({ myIdToken, myUserName }) => {
           onChange={(e) => setThreadNum(e.target.value)}
           placeholder="スレ数"
         />
-        <div>
-          <span>口の悪さ</span>
-          <input
-            className="thread-gauge"
-            type="range"
-            min="1"
-            max="5"
-            step="1"
-            value={crazyLevel}
-            onChange={changeCrazyLevel}
-          />
-        </div>
-
+        危険度
+        <input
+          className="thread-gauge"
+          type="range"
+          min="1"
+          max="5"
+          step="1"
+          value={crazyLevel}
+          onChange={changeCrazyLevel}
+        />
         <RadioButtonItems
           handleChange={handleChange}
           checkedValue={checkedValue}
           items={items}
         />
-
+        <button
+          className={`input-button  ${isLoading ? "loadingButton" : ""}`}
+          onClick={handleGenerate}
+        >
+          生成
+        </button>
         <div className={isLoading ? "loading" : ""}></div>
       </div>
       <div className="content-container">
