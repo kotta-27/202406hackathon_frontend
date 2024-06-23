@@ -44,7 +44,7 @@ function Claude({ myIdToken }) {
           items={items}
           className="RadioButtonItems"
         /> */}
-        <img className="image" src="sad_002.png" />
+        {/* <img className="image" src="sad_002.png" /> */}
         <h2>なんJnerator</h2>
         <CallClaudeLambda myIdToken={myIdToken} />
       </div>

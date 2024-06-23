@@ -3,13 +3,17 @@ import "../stylesheet/CallClaude.css";
 
 const CallClaudeLambda = ({ myIdToken }) => {
   const [prompt, setPrompt] = useState("");
-  const [threadNum, setThreadNum] = useState(10);
+  const [threadNum, setThreadNum] = useState(1);
   const [responseArray, setResponseArray] = useState([]);
   const [error, setError] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [jsonURL, setJsonURL] = useState("");
   const [crazyLevel, setCrazyLevel] = useState(1);
   const [imageUrl, setImageUrl] = useState("");
+  const [replyPrompt, setReplyPrompt] = useState("");
+
+  const [replyArray, setReplyArray] = useState([]);
+  const [isReplyExist, setIsReplyExist] = useState(false);
 
   const invokeTextLambda = async () => {
     const url =
@@ -30,6 +34,7 @@ const CallClaudeLambda = ({ myIdToken }) => {
 
     try {
       console.log("Sending request to API Gateway");
+      console.log("num:", threadNum);
       const response = await fetch(url, {
         method: "POST",
         headers: headers,
@@ -43,7 +48,10 @@ const CallClaudeLambda = ({ myIdToken }) => {
       const responseText = await response.text();
       const responseJson = JSON.parse(responseText);
       const responseMessage = JSON.parse(responseJson.body);
-      const responseJsonMessage = JSON.parse(responseMessage.message);
+      const styledMessage = responseMessage.message.substring(
+        responseMessage.message.indexOf("[")
+      );
+      const responseJsonMessage = JSON.parse(styledMessage);
 
       const fileName = "thread";
       const fileNameWithJson = `${fileName}.json`;
@@ -54,6 +62,7 @@ const CallClaudeLambda = ({ myIdToken }) => {
       setJsonURL(jsonURLTemp);
 
       setResponseArray(responseJsonMessage);
+      console.log("Response:", responseJsonMessage);
       setError(null);
     } catch (error) {
       console.error("Error during request:", error);
@@ -71,18 +80,17 @@ const CallClaudeLambda = ({ myIdToken }) => {
         {
           text: `
                 you are a famous advertising agency designer.  
-                please generate ultimate hight quality real 
+                please generate ultimate high quality real 
                 photographic advertising on the internet.
                 for example, game, application, and so on.
                 or the image of ${prompt}.
                 `,
-          weight: 0.8,
+          weight: 1.0,
         },
       ],
-      model_id: "stability.stable-diffusion-xl-v1",
       cfg_scale: 10,
       seed: seed,
-      steps: 100,
+      steps: 50,
       width: 512,
       height: 512,
     };
@@ -120,6 +128,65 @@ const CallClaudeLambda = ({ myIdToken }) => {
     }
   };
 
+  const invokeReplyTextLambda = async (event) => {
+    event.preventDefault();
+
+    const url =
+      "https://k0btfvyqx5.execute-api.us-west-2.amazonaws.com/2024hackathon/claude3/reply";
+    const idToken = myIdToken;
+
+    const headers = {
+      "Content-Type": "application/json",
+      Authorization: idToken,
+    };
+    const data = {
+      pre_thread: responseArray,
+      reply: replyPrompt,
+      length: parseInt(threadNum) + 1,
+      level: crazyLevel,
+    };
+
+    console.log("ReplyThreadNum:", threadNum + 1);
+
+    try {
+      console.log("Sending request to API Gateway");
+      const response = await fetch(url, {
+        method: "POST",
+        headers: headers,
+        body: JSON.stringify(data),
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+
+      const responseText = await response.text();
+      const responseJson = JSON.parse(responseText);
+      const responseMessage = JSON.parse(responseJson.body);
+      const styledMessage = responseMessage.message.substring(
+        responseMessage.message.indexOf("[")
+      );
+      const responseJsonMessage = JSON.parse(styledMessage);
+
+      const fileName = "thread";
+      const fileNameWithJson = `${fileName}.json`;
+      const blobData = new Blob([JSON.stringify(responseJsonMessage)], {
+        type: "text/json",
+      });
+      const jsonURLTemp = URL.createObjectURL(blobData);
+      setJsonURL(jsonURLTemp);
+
+      setReplyArray(responseJsonMessage);
+      setIsReplyExist(true);
+
+      console.log("ReplyResponse:", replyArray);
+      setError(null);
+    } catch (error) {
+      console.error("Error during request:", error);
+      setError("リクエストの送信中にエラーが発生しました: " + error.message);
+    }
+  };
+
   const handleGenerate = async () => {
     setIsLoading(true);
     await invokeTextLambda();
@@ -131,6 +198,13 @@ const CallClaudeLambda = ({ myIdToken }) => {
 
   const changeCrazyLevel = (e) => {
     setCrazyLevel(e.target.value);
+  };
+
+  useEffect(() => {}, [replyArray]);
+
+  const deleteReplyForm = () => {
+    setReplyPrompt("");
+    setIsReplyExist(false);
   };
 
   return (
@@ -194,8 +268,53 @@ const CallClaudeLambda = ({ myIdToken }) => {
             </div>
           </div>
         )}
+        {responseArray.length > 0 && (
+          <form onSubmit={invokeReplyTextLambda}>
+            <input
+              className={`response-form ${isReplyExist ? "reply-exist" : ""}`}
+              type="text"
+              placeholder="返信を入力"
+              onChange={(e) => setReplyPrompt(e.target.value)}
+            />
+            <button
+              className={`response-submit ${isReplyExist ? "reply-exist" : ""}`}
+              type="submit"
+              // onClick={deleteReplyForm}
+            >
+              送信
+            </button>
+          </form>
+        )}
+        {replyArray.length > 0 && (
+          <div className="post-container">
+            <p className="userinfo">
+              {parseInt(threadNum) + 1} 名前：
+              <span className="username">test</span>
+              {": "}
+              {responseArray[responseArray.length - 1].time} @YOU
+            </p>
+            <p className="content">{replyPrompt}</p>
+          </div>
+        )}
+        {replyArray.length > 0 && (
+          <div>
+            <div className="thread-content">
+              {replyArray.slice(1).map((res, index) => (
+                <div key={index} className="post-container">
+                  <p className="userinfo">
+                    {res.index} 名前：
+                    <span className="username">{res.name}</span>
+                    {index !== 0 && ":"} {res.time} {res.id}
+                  </p>
+                  <p className="content">{res.content}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
         {error && <div>Error: {error}</div>}
         <p>{crazyLevel}</p>
+        <a href={jsonURL}>aa</a>
       </div>
     </div>
   );
